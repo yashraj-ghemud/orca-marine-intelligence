@@ -25,3 +25,6 @@
 
 ## Additional interaction verification
 The language menu exposed English and हिन्दी options, and the alert control surfaced a simulated marine alert with dismiss and view-on-map actions. The safety result and alert states remained coherent while the map overlays stayed visible.
+
+## Production deployment
+The first Vercel build failed because the project forced `output: standalone`, which conflicted with Vercel’s Next.js builder. The config was changed to standard Next output, the production scripts were made platform-portable, and the fix was pushed as commit `e27033e`. The corrected production deployment reached READY status and the public alias loaded successfully at https://orca-marine-intelligence.vercel.app.
