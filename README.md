@@ -70,7 +70,7 @@ Defined in `src/app/globals.css` — marine palette (`#124E78` deep ocean primar
 
 ```bash
 npm run dev     # dev server on :3000
-npm run build   # production build (standalone)
+npm run build   # production build
 npm run lint    # eslint
 npm run db:push # prisma schema push (DB is scaffolded, not used by the prototype)
 ```
