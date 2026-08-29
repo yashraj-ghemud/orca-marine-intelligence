@@ -1,0 +1,839 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "leaflet/dist/leaflet.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* ── ORCA marine intelligence tokens ─────────────────── */
+  --color-ocean-bg: #f5f8fa;
+  --color-ocean-surface: #ffffff;
+  --color-ocean-navy: #124e78;
+  --color-ocean-blue: #2f6f95;
+  --color-ocean-info: #eaf4f8;
+  --color-ocean-teal: #e9f5f2;
+  --color-ocean-warn: #fff2e8;
+  --color-ocean-danger: #fdecec;
+  --color-ocean-ink: #17232d;
+  --color-ocean-slate: #64727d;
+  --color-ocean-line: #d9e3e8;
+  --color-ocean-success: #2e7d5b;
+  --color-ocean-success-bg: #e6f4ee;
+  --color-ocean-warn-fg: #b45309;
+  --color-ocean-danger-fg: #b42318;
+  --color-ocean-teal-fg: #0f766e;
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: #f5f8fa;
+  --foreground: #17232d;
+  --card: #ffffff;
+  --card-foreground: #17232d;
+  --popover: #ffffff;
+  --popover-foreground: #17232d;
+  --primary: #124e78;
+  --primary-foreground: #f8fafc;
+  --secondary: #eaf4f8;
+  --secondary-foreground: #124e78;
+  --muted: #f0f4f7;
+  --muted-foreground: #64727d;
+  --accent: #eaf4f8;
+  --accent-foreground: #124e78;
+  --destructive: #b42318;
+  --border: #d9e3e8;
+  --input: #d9e3e8;
+  --ring: #2f6f95;
+  --chart-1: #124e78;
+  --chart-2: #2f6f95;
+  --chart-3: #2e7d5b;
+  --chart-4: #b45309;
+  --chart-5: #b42318;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #17232d;
+  --sidebar-primary: #124e78;
+  --sidebar-primary-foreground: #f8fafc;
+  --sidebar-accent: #eaf4f8;
+  --sidebar-accent-foreground: #124e78;
+  --sidebar-border: #d9e3e8;
+  --sidebar-ring: #2f6f95;
+}
+
+.dark {
+  --background: #0d1520;
+  --foreground: #e8eef2;
+  --card: #14202e;
+  --card-foreground: #e8eef2;
+  --popover: #14202e;
+  --popover-foreground: #e8eef2;
+  --primary: #4a8db8;
+  --primary-foreground: #0d1520;
+  --secondary: #1a2937;
+  --secondary-foreground: #e8eef2;
+  --muted: #1a2937;
+  --muted-foreground: #8b9aa5;
+  --accent: #1a2937;
+  --accent-foreground: #e8eef2;
+  --destructive: #e5484d;
+  --border: #24384a;
+  --input: #24384a;
+  --ring: #4a8db8;
+  --chart-1: #4a8db8;
+  --chart-2: #62a8ce;
+  --chart-3: #3d9a6e;
+  --chart-4: #d97706;
+  --chart-5: #e5484d;
+  --sidebar: #14202e;
+  --sidebar-foreground: #e8eef2;
+  --sidebar-primary: #4a8db8;
+  --sidebar-primary-foreground: #0d1520;
+  --sidebar-accent: #1a2937;
+  --sidebar-accent-foreground: #e8eef2;
+  --sidebar-border: #24384a;
+  --sidebar-ring: #4a8db8;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* ── ORCA data typography ─────────────────────────────── */
+.data-label {
+  font-size: 10.5px;
+  line-height: 1.3;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-weight: 550;
+  color: #64727d;
+}
+.data-value {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* ── Scrollbars ───────────────────────────────────────── */
+.orca-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #c3d0d8 transparent;
+}
+.orca-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.orca-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.orca-scroll::-webkit-scrollbar-thumb {
+  background: #c3d0d8;
+  border-radius: 8px;
+}
+.orca-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a8b9c3;
+}
+
+/* ── Leaflet marine cartography overrides ─────────────── */
+.leaflet-container {
+  background: #a8c5d5;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  outline: none !important;
+}
+.leaflet-control-zoom {
+  border: 1px solid #d9e3e8 !important;
+  box-shadow: 0 1px 3px rgba(23, 35, 45, 0.1) !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+.leaflet-control-zoom a {
+  background: #ffffff !important;
+  color: #17232d !important;
+  border-bottom: 1px solid #e6edf1 !important;
+  width: 30px !important;
+  height: 30px !important;
+  line-height: 30px !important;
+  font-weight: 500;
+}
+.leaflet-control-zoom a:last-child {
+  border-bottom: none !important;
+}
+.leaflet-control-zoom a:hover {
+  background: #eaf4f8 !important;
+  color: #124e78 !important;
+}
+.leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.82) !important;
+  color: #8b99a3 !important;
+  font-size: 9.5px !important;
+  padding: 1px 6px !important;
+  border-radius: 4px 0 0 0;
+}
+.leaflet-control-attribution a {
+  color: #64727d !important;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 10px !important;
+  box-shadow: 0 4px 16px rgba(23, 35, 45, 0.14) !important;
+  border: 1px solid #d9e3e8;
+}
+.leaflet-popup-content {
+  margin: 10px 14px !important;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.leaflet-popup-tip {
+  box-shadow: none !important;
+}
+.leaflet-interactive:focus {
+  outline: none;
+}
+.leaflet-tooltip.orca-tooltip {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #d9e3e8;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(23, 35, 45, 0.12);
+  color: #17232d;
+  font-size: 11px;
+  font-weight: 550;
+  padding: 4px 8px;
+}
+.leaflet-tooltip.orca-tooltip::before {
+  display: none;
+}
+
+/* ── Map marker animations ────────────────────────────── */
+@keyframes orca-pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.85;
+  }
+  70% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+.vessel-pulse-ring {
+  animation: orca-pulse 2.4s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+@keyframes hazard-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.hazard-dot-pulse {
+  animation: hazard-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes dash-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.route-draw {
+  stroke-dasharray: 8 6;
+  animation: dash-draw 1.6s ease-out forwards, route-flow 1.2s linear infinite;
+}
+@keyframes route-flow {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+@keyframes zone-fade-in {
+  from {
+    fill-opacity: 0;
+  }
+  to {
+    fill-opacity: 1;
+  }
+}
+.zone-enter {
+  animation: zone-fade-in 0.9s ease-out;
+}
+
+/* ── Micro transitions ────────────────────────────────── */
+@keyframes msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.msg-enter {
+  animation: msg-in 0.28s cubic-bezier(0.25, 0.8, 0.35, 1) both;
+}
+
+@keyframes alert-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.alert-enter {
+  animation: alert-in 0.32s cubic-bezier(0.25, 0.8, 0.35, 1) both;
+}
+
+@keyframes drawer-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.drawer-enter {
+  animation: drawer-up 0.3s cubic-bezier(0.25, 0.8, 0.35, 1) both;
+}
+
+@keyframes soft-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+.soft-blink {
+  animation: soft-blink 1.6s ease-in-out infinite;
+}
+
+@keyframes stage-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.stage-spin {
+  animation: stage-spin 0.9s linear infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ORCA MOTION SYSTEM — continuous marine life, spring physics,
+   signature sonar moments. GPU-only (transform/opacity/offset).
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── 1. Vessel sonar — multi-ring ping, accelerates while ORCA thinks ── */
+@keyframes orca-sonar {
+  0% {
+    transform: scale(0.32);
+    opacity: 0.95;
+  }
+  75% {
+    transform: scale(2.7);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.7);
+    opacity: 0;
+  }
+}
+.vessel-sonar {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(18, 78, 120, 0.42) 0%, rgba(18, 78, 120, 0.12) 55%, transparent 72%);
+  animation: orca-sonar 2.8s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+.vessel-sonar.s2 {
+  animation-delay: 0.95s;
+}
+.vessel-sonar.s3 {
+  animation-delay: 1.9s;
+}
+.vessel-live .vessel-sonar {
+  animation-duration: 1.15s;
+  background: radial-gradient(circle, rgba(18, 78, 120, 0.55) 0%, rgba(47, 111, 149, 0.2) 55%, transparent 72%);
+}
+.vessel-live .vessel-pulse-ring {
+  animation-duration: 1.15s;
+}
+@keyframes orca-vessel-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1.5px);
+  }
+}
+.vessel-bob {
+  animation: orca-vessel-bob 3.4s ease-in-out infinite;
+}
+
+/* ── 2. Cyclone — rotating spiral arms + breathing danger rings ── */
+@keyframes orca-cyclone-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.cyclone-spiral {
+  position: absolute;
+  inset: -14px;
+  animation: orca-cyclone-spin 9s linear infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+@keyframes orca-ring-breathe {
+  0%,
+  100% {
+    opacity: 0.32;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.ring-breathe {
+  animation: orca-ring-breathe 2.6s ease-in-out infinite;
+}
+.ring-breathe.d1 {
+  animation-delay: 0.85s;
+}
+.ring-breathe.d2 {
+  animation-delay: 1.7s;
+}
+@keyframes orca-danger-glow {
+  0%,
+  100% {
+    box-shadow: 0 1px 6px rgba(180, 35, 24, 0.45);
+  }
+  50% {
+    box-shadow: 0 1px 14px rgba(180, 35, 24, 0.85);
+  }
+}
+.cyclone-core {
+  animation: orca-danger-glow 2s ease-in-out infinite;
+}
+
+/* ── 3. Flowing map lines — PFZ teal current, route energy, boundary march ── */
+@keyframes orca-dash-march {
+  to {
+    stroke-dashoffset: -48;
+  }
+}
+.pfz-flow {
+  animation:
+    zone-fade-in 0.9s ease-out,
+    orca-dash-march 2.6s linear infinite;
+}
+.route-under {
+  stroke-dasharray: 3 14;
+  animation: orca-dash-march 1.15s linear infinite;
+}
+.boundary-march {
+  animation: orca-dash-march 7s linear infinite;
+}
+@keyframes orca-hazard-breathe {
+  0%,
+  100% {
+    fill-opacity: 0.1;
+  }
+  50% {
+    fill-opacity: 0.24;
+  }
+}
+.hazard-breathe {
+  animation: orca-hazard-breathe 3.2s ease-in-out infinite;
+}
+@keyframes orca-safe-breathe {
+  0%,
+  100% {
+    fill-opacity: 0.06;
+  }
+  50% {
+    fill-opacity: 0.14;
+  }
+}
+.safe-breathe {
+  animation: orca-safe-breathe 4.2s ease-in-out infinite;
+}
+
+/* ── 4. Shimmer sweeps — processing text, badges, verdict header ── */
+@keyframes orca-shimmer-sweep {
+  0% {
+    background-position: -220% 0;
+  }
+  100% {
+    background-position: 220% 0;
+  }
+}
+.shimmer-text {
+  background: linear-gradient(100deg, currentColor 38%, rgba(47, 111, 149, 0.95) 50%, currentColor 62%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: orca-shimmer-sweep 1.9s linear infinite;
+}
+.badge-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.badge-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.75) 50%, transparent 58%);
+  background-size: 220% 100%;
+  animation: orca-shimmer-sweep 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ── 5. Header ocean line — panning tide gradient ── */
+@keyframes orca-tide-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+.ocean-line-live {
+  background: linear-gradient(
+    90deg,
+    #124e78 0%,
+    #2f6f95 18%,
+    #0f766e 34%,
+    #2f6f95 52%,
+    #124e78 70%,
+    #0f766e 86%,
+    #124e78 100%
+  );
+  background-size: 200% 100%;
+  animation: orca-tide-pan 9s linear infinite;
+}
+
+/* ── 6. Bell swing — when unread alerts exist ── */
+@keyframes orca-bell-swing {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  12% {
+    transform: rotate(15deg);
+  }
+  28% {
+    transform: rotate(-13deg);
+  }
+  44% {
+    transform: rotate(9deg);
+  }
+  60% {
+    transform: rotate(-6deg);
+  }
+  76% {
+    transform: rotate(3deg);
+  }
+  88% {
+    transform: rotate(-1deg);
+  }
+}
+.bell-swing {
+  transform-origin: 50% 4px;
+  animation: orca-bell-swing 1.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+}
+
+/* ── 7. Ambient chat bubbles — slow deep-water rise ── */
+@keyframes orca-bubble-rise {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.7);
+    opacity: 0;
+  }
+  8% {
+    opacity: var(--bubble-o, 0.5);
+  }
+  50% {
+    transform: translateY(-48vh) translateX(var(--bubble-x, 8px)) scale(1);
+  }
+  92% {
+    opacity: calc(var(--bubble-o, 0.5) * 0.5);
+  }
+  100% {
+    transform: translateY(-104vh) translateX(calc(var(--bubble-x, 8px) * -0.6)) scale(1.25);
+    opacity: 0;
+  }
+}
+.chat-bubble {
+  position: absolute;
+  bottom: -24px;
+  border-radius: 9999px;
+  border: 1px solid rgba(47, 111, 149, 0.35);
+  background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.9), rgba(234, 244, 248, 0.25) 62%, transparent);
+  animation: orca-bubble-rise var(--bubble-d, 17s) linear infinite;
+  animation-delay: var(--bubble-delay, 0s);
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* ── 8. Wave footer — layered translating waves ── */
+@keyframes orca-wave-slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.wave-strip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  animation: orca-wave-slide var(--wave-d, 11s) linear infinite;
+  will-change: transform;
+}
+
+/* ── 9. Barber-pole hazard tape — alert toasts ── */
+@keyframes orca-stripe-march {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 28px 0;
+  }
+}
+.hazard-tape {
+  height: 5px;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    #b42318 0 8px,
+    #fdecec 8px 16px,
+    #b45309 16px 24px,
+    #fdecec 24px 32px
+  );
+  background-size: 28.28px 100%;
+  animation: orca-stripe-march 1.1s linear infinite;
+}
+
+/* ── 10. Micro-motion — floats, drifts, glow pulse, pops ── */
+@keyframes orca-float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+.float-soft {
+  animation: orca-float-y 4.4s ease-in-out infinite;
+}
+@keyframes orca-drift {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-3px) translateX(2px);
+  }
+}
+.drift-soft {
+  animation: orca-drift 6.5s ease-in-out infinite;
+}
+@keyframes orca-logo-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  80%,
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+.logo-ping {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  border: 1.5px solid rgba(47, 111, 149, 0.7);
+  animation: orca-logo-ping 3.2s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+  pointer-events: none;
+}
+@keyframes orca-mic-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(18, 78, 120, 0.35);
+  }
+  60% {
+    box-shadow: 0 0 0 7px rgba(18, 78, 120, 0);
+  }
+}
+.mic-pulse {
+  animation: orca-mic-pulse 1.6s ease-out infinite;
+}
+@keyframes orca-pop-in {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.pop-in {
+  animation: orca-pop-in 0.34s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes orca-risk-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.risk-fill {
+  transform-origin: left;
+  animation: orca-risk-fill 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+@keyframes orca-scanline {
+  0% {
+    transform: translateY(-110%);
+  }
+  100% {
+    transform: translateY(420%);
+  }
+}
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 26%;
+  background: linear-gradient(180deg, transparent, rgba(47, 111, 149, 0.09), transparent);
+  animation: orca-scanline 2.1s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes orca-burst-ring {
+  0% {
+    transform: scale(0.55);
+    opacity: 0.75;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+.burst-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  border: 2px solid var(--burst-color, #2f6f95);
+  animation: orca-burst-ring 0.9s cubic-bezier(0.2, 0.6, 0.4, 1) 0.1s both;
+  pointer-events: none;
+}
+
+/* ── Panel unfold — layers panel / collapsible sections ── */
+@keyframes orca-panel-unfold {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scaleY(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
+.panel-unfold {
+  transform-origin: top;
+  animation: orca-panel-unfold 0.22s cubic-bezier(0.25, 0.8, 0.35, 1) both;
+}
+
+/* ── Reduced motion — calm sea for everyone ── */
+@media (prefers-reduced-motion: reduce) {
+  .vessel-sonar,
+  .vessel-pulse-ring,
+  .vessel-bob,
+  .cyclone-spiral,
+  .ring-breathe,
+  .cyclone-core,
+  .pfz-flow,
+  .route-under,
+  .boundary-march,
+  .hazard-breathe,
+  .safe-breathe,
+  .shimmer-text,
+  .badge-shimmer::after,
+  .ocean-line-live,
+  .bell-swing,
+  .chat-bubble,
+  .wave-strip,
+  .hazard-tape,
+  .float-soft,
+  .drift-soft,
+  .logo-ping,
+  .mic-pulse,
+  .scan-line,
+  .msg-enter,
+  .alert-enter,
+  .drawer-enter,
+  .soft-blink {
+    animation: none !important;
+  }
+}
