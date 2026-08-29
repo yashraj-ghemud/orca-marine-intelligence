@@ -28,3 +28,8 @@ The language menu exposed English and हिन्दी options, and the alert 
 
 ## Production deployment
 The first Vercel build failed because the project forced `output: standalone`, which conflicted with Vercel’s Next.js builder. The config was changed to standard Next output, the production scripts were made platform-portable, and the fix was pushed as commit `e27033e`. The corrected production deployment reached READY status and the public alias loaded successfully at https://orca-marine-intelligence.vercel.app.
+
+## Update archive verification
+The newly uploaded `orca-marine-prototype(4).zip` contains the same application source tree as the deployed project. The only archive differences were the previously addressed standalone/Node scripts, lint fixes, generated `next-env.d.ts`, and README wording; no new feature or component changes were detected. The archive was merged while preserving the Vercel-compatible fixes and delivery documentation.
+
+The merged app passed local ESLint and production build checks. Browser verification confirmed the workspace loaded, Leaflet map tiles rendered, and the safety query completed with the HIGH MARINE RISK result, evidence controls, and hazard/cyclone overlays.
