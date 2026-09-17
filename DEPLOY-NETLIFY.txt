@@ -1,0 +1,59 @@
+# ORCA — Netlify deploy notes
+
+1. Netlify → Add new site → Deploy manually is NOT for this zip: this is SOURCE, built by Netlify.
+   Use: Add new site → Import an existing project → drag this folder / connect the repo,
+   or: unzip, `netlify init`, `netlify deploy --build --prod` (Netlify CLI).
+   netlify.toml already sets: build = `bun install && bun run build`, plugin @netlify/plugin-nextjs.
+
+2. Site settings → Environment variables → add ALL of these (values from your local .env):
+
+   OPENROUTER_API_KEY=<paste your value>
+   GROQ_API_KEY=<paste your value>
+   ORCA_PLANNER_MODEL_ID=qwen/qwen3.8-27b
+   ORCA_RESPONSE_MODEL_ID=qwen/qwen3.8-27b
+   ORCA_SYNTHESIS_MODEL_ID=openai/gpt-oss-120b
+   ORCA_FALLBACK_MODEL_ID=openai/gpt-oss-20b
+   ORCA_OPENROUTER_URL=https://openrouter.ai/api/v1/chat/completions
+   ORCA_GROQ_URL=https://api.groq.com/openai/v1/chat/completions
+   ORCA_RESPONSE_VISION_ENABLED=true
+   INCOIS_API_KEY=<paste your value>
+   INCOIS_BASE_URL=https://incois.gov.in/portal/datainfo
+   INCOIS_PFZ_API_URL=https://incois.gov.in/portal/osf/map.jsp
+   INCOIS_PFZ_WMS_URL=https://incois.gov.in/geoserver/wms
+   COPERNICUS_USERNAME=your_copernicus_username
+   COPERNICUS_PASSWORD=<paste your value>
+   COPERNICUS_API_URL=https://data.marine.copernicus.eu/api
+   IMD_API_KEY=<paste your value>
+   IMD_API_BASE_URL=https://api.imd.gov.in
+   IMD_API_VERSION=v1
+   OPENWEATHER_API_KEY=<paste your value>
+   NOAA_API_KEY=<paste your value>
+   ORCA_INCOIS_ADAPTER_URL=/api/adapters/incois
+   ORCA_INCOIS_ADAPTER_TOKEN=<paste your value>
+   ORCA_COPERNICUS_ADAPTER_URL=/api/adapters/copernicus
+   ORCA_COPERNICUS_ADAPTER_TOKEN=<paste your value>
+   ORCA_WEATHER_ADAPTER_URL=/api/adapters/weather
+   ORCA_WEATHER_ADAPTER_TOKEN=<paste your value>
+   RISK_ENGINE_URL=/api/engines/risk
+   RISK_ENGINE_TOKEN=<paste your value>
+   GEOSPATIAL_ENGINE_URL=/api/engines/geospatial
+   GEOSPATIAL_ENGINE_TOKEN=<paste your value>
+   ROUTE_ENGINE_URL=/api/engines/route
+   ROUTE_ENGINE_TOKEN=<paste your value>
+   ORCA_TIMEOUT_MS=12000
+   ORCA_TOTAL_TIMEOUT_MS=90000
+   ORCA_RETRIES=1
+   ORCA_MAX_DATA_AGE_MS=3600000
+   ELEVENLABS_API_KEY=<paste your value>
+
+   Notes:
+   - ORCA_*_ADAPTER_URL and *_ENGINE_URL are /api/... paths on purpose: they resolve to this same
+     deployment. Do NOT put localhost here (it would be auto-repointed anyway, but be explicit).
+   - GROQ_API_KEY is required. ELEVENLABS_API_KEY is optional (realistic Hindi/Gujarati/English voice);
+     without it English TTS uses Groq Orpheus (accept its terms once in the Groq console) or the browser.
+   - OPENROUTER_API_KEY is no longer used by the pipeline; safe to omit.
+
+3. After deploy: open the site → status button (top bar) → "Check connection" → expect 7 green rows.
+   Or: curl https://<site>/api/orca?probe=1
+
+4. Replay the intro any time with ?intro=force ; skip it with ?intro=off .
